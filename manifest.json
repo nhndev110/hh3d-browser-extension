@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "HoatHinh3D Extension",
+  "version": "1.2",
+  "description": "Automation tool for HoatHinh3D",
+  "author": "Hoài Nam & NHN",
+  "permissions": ["storage", "activeTab", "tabs", "scripting"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["zalo.png", "momo.png"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "128": "icon.png"
+  }
+}

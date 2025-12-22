@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HoatHinh3D Automation</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tom-select.min.css" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Navigation Tabs -->
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-page="home">
+          <i class="fas fa-home"></i>
+        </button>
+        <button class="nav-tab" data-page="settings">
+          <i class="fas fa-cogs"></i>
+        </button>
+        <button class="nav-tab" data-page="contact">
+          <i class="fas fa-heart"></i>
+        </button>
+      </div>
+
+      <!-- Page 1: Home -->
+      <div id="home" class="page active">
+        <!-- Run Section -->
+        <div class="functions-section">
+          <button id="runBtn" class="function-btn run">
+            <i class="fas fa-play btn-icon"></i>
+            Chạy Tự Động
+          </button>
+          <div class="status-container">
+            <div id="run-status"></div>
+          </div>
+        </div>
+
+        <!-- Main Functions Section -->
+        <div class="functions-section">
+          <div class="section-title">
+            <i class="fas fa-cogs btn-icon"></i>
+            Chức Năng Chính
+          </div>
+
+          <div class="function-item">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-group1" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="function-title">Điểm Danh, Tế Lễ, Vấn Đáp</div>
+            <button id="navGroup1" class="access-btn">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="function-item">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-group2" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="function-title">Phúc Lợi, Bí Cảnh</div>
+            <button id="navGroup2" class="access-btn">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="function-item">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-hoangvuc" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="function-title">Hoang Vực</div>
+            <button id="navHoangVuc" class="access-btn">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="function-item">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-group3" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="function-title">Thí Luyện, Đổ Thạch</div>
+            <button id="navGroup3" class="access-btn">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="function-item">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-luanvo" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="function-title">Luận Võ</div>
+            <button id="navLuanVo" class="access-btn">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="function-item">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-banghoatdong" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="function-title">Bảng Hoạt Động</div>
+            <button id="navBangHoatDong" class="access-btn">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="function-item">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-khoangmach" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="function-title">Khoáng Mạch</div>
+            <button id="navKhoangMach" class="access-btn">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page 2: Settings -->
+      <div id="settings" class="page">
+        <div class="input-section">
+          <div>
+            <label class="input-label" for="domain">
+              Nhập Domain HoatHinh3D
+            </label>
+            <input
+              type="text"
+              id="domain"
+              class="input-field"
+              value="https://hoathinh3d.gg/"
+              placeholder="https://hoathinh3d.gg/"
+            />
+          </div>
+
+          <div class="mt-12">
+            <label class="input-label" for="memberType">
+              Loại Thành Viên
+            </label>
+            <select class="input-field" name="memberType" id="memberType">
+              <option value="normal">Thường</option>
+              <option value="vip">VIP</option>
+            </select>
+          </div>
+
+          <div class="mt-12">
+            <label class="input-label" for="hoangvucStrategy">
+              Chiến thuật hoang vực
+            </label>
+            <select
+              class="input-field"
+              name="hoangvucStrategy"
+              id="hoangvucStrategy"
+            >
+              <option value="none">Không reset linh căn</option>
+              <option value="avoid">Reset tránh bị trừ 15%</option>
+              <option value="buff">Reset để được công 15%</option>
+            </select>
+          </div>
+
+          <div class="mt-12">
+            <label class="input-label" for="khoangMachSelectedId">
+              Khoáng Mạch
+            </label>
+            <select
+              name="khoangMachSelectedId"
+              placeholder="Chọn ID Khoáng Mạch"
+              id="khoangMachSelectedId"
+              autocomplete="off"
+            ></select>
+          </div>
+
+          <div class="mt-12">
+            <label class="input-label" for="khoangMachStrategy">
+              Chiến thuật khoáng mạch
+            </label>
+            <select
+              name="khoangMachStrategy"
+              placeholder="Chọn chiến thuật Khoáng Mạch"
+              class="input-field"
+              id="khoangMachStrategy"
+              autocomplete="off"
+            >
+              <option value="none">Vào mỏ không nhận thưởng</option>
+              <option value="focus">Chỉ nhận thưởng khi thưởng thêm %</option>
+            </select>
+          </div>
+
+          <div class="mt-12">
+            <label class="input-label" for="">
+              Nhận khoáng mạnh khi thưởng thêm
+            </label>
+            <select
+              name="khoangMachStrategy"
+              placeholder="Chọn chiến thuật Khoáng Mạch"
+              class="input-field"
+              id="khoangMachStrategy"
+              autocomplete="off"
+            >
+              <option value="0">0%</option>
+              <option value="20">20%</option>
+              <option value="100">100%</option>
+            </select>
+          </div>
+
+          <div class="mt-12">
+            <label class="input-label" for="">Nhận khoáng mạnh ở phút</label>
+            <input
+              type="number"
+              id="khoangMachMinute"
+              class="input-field"
+              min="2"
+              max="90"
+              placeholder="Nhập phút (2-90)"
+            />
+          </div>
+
+          <button id="save" class="save-btn">
+            <i class="fas fa-save btn-icon"></i>
+            Lưu Cấu Hình
+          </button>
+
+          <div class="status-container"></div>
+        </div>
+      </div>
+
+      <!-- Page 3: Contact (Liên hệ) -->
+      <div id="contact" class="page">
+        <div class="contact-section">
+          <div class="section-title">
+            <i class="fas fa-heart btn-icon"></i>
+            Liên Hệ & Hỗ Trợ
+          </div>
+
+          <button id="contactBtn" class="contact-btn contact">
+            <i class="fab fa-facebook-messenger btn-icon"></i>
+            Liên Hệ Zalo
+          </button>
+
+          <button id="donate" class="contact-btn donate">
+            <i class="fas fa-coffee btn-icon"></i>
+            Ủng Hộ Tác Giả
+          </button>
+
+          <!-- QR Container -->
+          <div id="qr-container" class="qr-container">
+            <img
+              id="qr-image"
+              class="qr-image"
+              src="/placeholder.svg"
+              alt="QR Code"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./tom-select.complete.min.js"></script>
+    <script type="module" src="./const.js"></script>
+    <script type="module" src="./utils.js"></script>
+    <script type="module" src="./popup.js"></script>
+  </body>
+</html>
