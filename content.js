@@ -107,7 +107,7 @@ const QUESTION_ANSWERS = {
   "Tiêu Viêm đã lập nên thế lực nào khi ở Học Viện Già Nam ?": "Bàn Môn",
   "Tiêu Viêm trong Đấu Phá Thương Khung đã Hẹn Ước 3 Năm với ai ?": "Nạp Lan Yên Nhiên",
   "Tiêu Viêm trong Đấu Phá Thương Khung sử dụng loại vũ khí nào sau đây ?": "Thước",
-  "Tiêu Viêm trong Đấu Phá Thương Khung thuộc gia tộc nào?": "Tiêu Gia",
+  "Tiêu Viêm trong Đấu Phá Thương Khung thuộc gia tộc nào?": "Tiêu gia",
   "Tình đầu của Diệp Phàm trong Già Thiên là ai ?": "Lý Tiểu Mạn",
   "Trần Bình An là nam chính trong bộ phim hoạt hình trung quốc nào ?": "Kiếm Lai",
   "Triệu Ngọc Chân là nhân vật trong bộ hoạt hình trung quốc nào sau đây ?": "Thiếu Niên Bạch Mã Tuý Xuân Phong",
@@ -976,112 +976,55 @@ isValidHoatHinh3DPage(() => {
   }
 
   async function vanDapTongMon() {
-    let questionTimeout = null;
     let retryTimeout = null;
 
-    waitForElement("#start-quiz-button", startButton => {
-      console.log("Sẽ nhấn nút bắt đầu sau 1 giây...");
-      setTimeout(() => {
-        startButton.click();
-        processQuestion();
-      }, 1000);
-    });
+    const startQuizButton = $("#start-quiz-button");
 
-    function processQuestion() {
-      if (questionTimeout) {
-        clearTimeout(questionTimeout);
-      }
+    if (startQuizButton) {
+      updateAnswerOverlay(null, null, "Nút bắt đầu đã có sẵn, sẽ nhấn ngay bây giờ...");
+      startQuizButton.click();
+      await processQuestion();
+    }
+
+    async function processQuestion() {
       if (retryTimeout) {
         clearTimeout(retryTimeout);
       }
 
-      waitForElement("#question", questionElement => {
-        questionTimeout = setTimeout(() => {
-          const questionText = questionElement.textContent.trim();
+      await sleep(3000);
 
-          if (!questionText) {
-            console.warn("[ProcessQuestion] Question text is empty, retrying...");
-            updateAnswerOverlay(questionText, null, "Câu hỏi trống, thử lại...");
-            retryTimeout = setTimeout(processQuestion, 1000);
-            return;
-          }
+      const questionElement = $("#question");
+      const questionText = questionElement.textContent.trim();
 
-          console.log("[ProcessQuestion] Question: \"" + questionText + "\"");
+      if (!questionText) {
+        updateAnswerOverlay(questionText, null, "Câu hỏi trống, thử lại...");
+        return;
+      }
 
-          let bestAnswer = null;
-          let bestSimilarity = 0;
+      const correctAnswer = QUESTION_ANSWERS[questionText];
+      if (!correctAnswer) {
+        updateAnswerOverlay(questionText, null, "Không tìm thấy câu trả lời trong dữ liệu, thử lại...");
+        return;
+      }
 
-          for (const [question, answer] of Object.entries(QUESTION_ANSWERS)) {
-            const similarity = fuzzyMatch(question, questionText);
-            if (similarity > bestSimilarity) {
-              bestSimilarity = similarity;
-              bestAnswer = answer;
-              console.log("[Match] Potential match - Question: \"" + question + "\", Answer: \"" + answer + "\", Similarity: " + similarity);
-            }
-            if (similarity === 1) {
-              break;
-            }
-          }
+      updateAnswerOverlay(questionText, correctAnswer, "Đang tìm tùy chọn...");
+      const options = $$(".options .option");
+      let answered = false;
 
-          if (bestAnswer && bestSimilarity >= 0.98) {
-            console.log("[Match] Confirmed match - Answer: \"" + bestAnswer + "\", Similarity: " + bestSimilarity);
-            updateAnswerOverlay(questionText, bestAnswer, "Đang tìm tùy chọn...");
+      options.forEach((option) => {
+        if (option.textContent.trim() === correctAnswer) {
+          option.click();
+          answered = true;
+          updateAnswerOverlay(questionText, correctAnswer, "Đã chọn tùy chọn khớp chính xác");
+        }
+      });
 
-            waitForElement(".options .option", () => {
-              const options = document.querySelectorAll(".options .option");
-              console.log("[Options] Found " + options.length + " options");
+      if (!answered) {
+        updateAnswerOverlay(questionText, correctAnswer, "Không tìm thấy tùy chọn khớp chính xác, thử lại...");
+        return;
+      }
 
-              let optionClicked = false;
-
-              options.forEach((option, index) => {
-                // THÊM: Nếu đã click rồi thì bỏ qua
-                if (optionClicked) return;
-
-                const optionText = option.textContent.trim();
-                console.log("[Option " + index + "] Raw: \"" + optionText + "\"");
-
-                if (optionText === bestAnswer) {
-                  console.log("[Click] Exact match for option: \"" + optionText + "\"");
-                  try {
-                    option.click();
-                    console.log("[Click] Clicked option " + index + " successfully");
-                    updateAnswerOverlay(questionText, bestAnswer, "Đã chọn tùy chọn khớp chính xác");
-                    optionClicked = true;
-                    return;
-                  } catch (error) {
-                    console.error("[Click] Failed to click option " + index + ":", error);
-                    updateAnswerOverlay(questionText, bestAnswer, "Lỗi khi chọn tùy chọn");
-                  }
-                } else if (fuzzyMatch(optionText, bestAnswer) >= 0.98) {
-                  console.log("[Click] Fuzzy match for option: \"" + optionText + "\"");
-                  try {
-                    option.click();
-                    console.log("[Click] Clicked option " + index + " successfully");
-                    updateAnswerOverlay(questionText, bestAnswer, "Đã chọn tùy chọn khớp gần đúng");
-                    optionClicked = true;
-                    return;
-                  } catch (error) {
-                    console.error("[Click] Failed to click option " + index + ":", error);
-                    updateAnswerOverlay(questionText, bestAnswer, "Lỗi khi chọn tùy chọn");
-                  }
-                }
-              });
-
-              if (!optionClicked) {
-                console.warn("Không tìm thấy tùy chọn phù hợp cho đáp án: \"" + bestAnswer + "\"");
-                console.log("[Debug] Available options:", Array.from(options).map(opt => opt.textContent.trim()));
-                updateAnswerOverlay(questionText, bestAnswer, "Không tìm thấy tùy chọn phù hợp");
-              }
-
-              retryTimeout = setTimeout(processQuestion, 1000);
-            }, 3000);
-          } else {
-            console.warn("Không tìm thấy câu hỏi phù hợp: \"" + questionText + "\" (Best Similarity: " + bestSimilarity + ")");
-            updateAnswerOverlay(questionText, null, "Không tìm thấy câu hỏi phù hợp");
-            retryTimeout = setTimeout(processQuestion, 1000);
-          }
-        }, 1000);
-      }, 3000);
+      processQuestion();
     }
   }
 
